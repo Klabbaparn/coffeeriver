@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">coffeeriver</string>
+    <string name="station_header">Stations</string>
 </resources>
