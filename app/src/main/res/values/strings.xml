@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">coffeeriver</string>
+    <string name="station_name">Station name</string>
+    <string name="station_about">About station</string>
+    <string name="image_desc">Image desc</string>
+    <string name="station_header">Station header</string>
+    <string name="play_header">Station header</string>
 </resources>
