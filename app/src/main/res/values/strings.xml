@@ -3,6 +3,8 @@
     <string name="station_name">Station name</string>
     <string name="station_about">About station</string>
     <string name="image_desc">Image desc</string>
-    <string name="station_header">Station header</string>
-    <string name="play_header">Station header</string>
+    <string name="station_header">Stations</string>
+    <string name="play_header">Media Player</string>
+    <string name="play_button_play">Play</string>
+    <string name="play_button_pause">Pause</string>
 </resources>
