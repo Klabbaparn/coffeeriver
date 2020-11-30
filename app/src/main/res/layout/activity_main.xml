@@ -1,37 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="#F3F3F3">
+    android:background="#F3F3F3"
+    tools:context=".MainActivity">
 
-    <RelativeLayout
+
+    <me.relex.circleindicator.CircleIndicator3
+        android:id="@+id/indicator"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:orientation="horizontal"
-        android:background="@color/white">
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:background="#1E88E5"/>
 
-        <ImageButton
-            android:id="@+id/back_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/arrow_left"
-            android:paddingLeft="5dp"
-            tools:text="Back"
-            android:background="@color/white"/>
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_above="@+id/indicator"/>
 
-        <TextView
-            android:id="@+id/page_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_centerInParent="true"
-            android:fontFamily="sans-serif"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:text="@string/station_header" />
-    </RelativeLayout>
 
-</LinearLayout>
+</RelativeLayout>
+

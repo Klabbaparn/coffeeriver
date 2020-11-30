@@ -32,14 +32,14 @@ class ChannelActivity : AppCompatActivity() {
         }
 
         Fuel
-            .get("http://api.sr.se/api/v2/channels?format=json")
-            .responseString{ _, _, result ->
-                val obj = JSONObject(result.get())
-                val channels = obj.getJSONArray("channels")
-                for (i in 0 until channels.length()) {
-                    val channel = channels.getJSONObject(i)
-                    createButton(channel)
+                .get("https://api.sr.se/api/v2/channels?format=json")
+                .responseString{ _, _, result ->
+                    val obj = JSONObject(result.get())
+                    val channels = obj.getJSONArray("channels")
+                    for (i in 0 until channels.length()) {
+                        val channel = channels.getJSONObject(i)
+                        createButton(channel)
+                    }
                 }
-            }
     }
 }

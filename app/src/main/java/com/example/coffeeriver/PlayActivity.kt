@@ -27,7 +27,7 @@ class PlayActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_play)
 
-        currentUrl = "http://sverigesradio.se/topsy/direkt/srapi/213.mp3"
+        currentUrl = "https://sverigesradio.se/topsy/direkt/srapi/213.mp3"
         var currentChannel = "P1"
         var channelImageUrl = "https://static-cdn.sr.se/images/132/2186745_512_512.jpg?preset=api-default-square"
 
