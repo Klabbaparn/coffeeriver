@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">coffeeriver</string>
     <string name="station_header">Stations</string>
+    <string name="play_header">Media Player</string>
+
+
+    <string name="play_button_play">Play</string>
+    <string name="play_button_pause">Pause</string>
+
+    <string name="test_url">"http://sverigesradio.se/topsy/direkt/132.mp3"</string>
 </resources>
