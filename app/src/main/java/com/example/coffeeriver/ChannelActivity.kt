@@ -2,22 +2,38 @@ package com.example.coffeeriver
 
 import android.graphics.Color
 import android.os.Bundle
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.github.kittinunf.fuel.Fuel
+import org.json.JSONArray
 import org.json.JSONObject
+import safety.com.br.android_shake_detector.core.ShakeDetector
+import safety.com.br.android_shake_detector.core.ShakeOptions
+import kotlin.random.Random
+
 
 class ChannelActivity : AppCompatActivity() {
 
     private lateinit var channelLayout: LinearLayout
+    private lateinit var backButton: ImageButton
+    private lateinit var shakeDetector: ShakeDetector
+    private lateinit var channels: JSONArray
+    private lateinit var randomChannel: JSONObject
+    private lateinit var pageHeader: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_channel)
 
         channelLayout = findViewById(R.id.channel_layout)
+
+        backButton = findViewById(R.id.back_button)
+        backButton.setOnClickListener {
+            finish()
+        }
+
+        pageHeader = findViewById(R.id.page_header)
+        pageHeader.setText("Sveriges Radio")
 
         fun createButton(channel: JSONObject) {
             val dynamicButton = Button(this)
@@ -27,7 +43,15 @@ class ChannelActivity : AppCompatActivity() {
             dynamicButton.text = channel.getString("name")
             dynamicButton.setBackgroundColor(Color.WHITE)
             dynamicButton.setTextColor(Color.BLACK)
-            dynamicButton.setOnClickListener { Toast.makeText(this, "Clicked button", Toast.LENGTH_SHORT).show() }
+            dynamicButton.setOnClickListener {
+                val intent = PlayActivity.newIntent(this@ChannelActivity,
+                        channel.getString("name"),
+                        channel.getJSONObject("liveaudio").getString("url"),
+                        channel.getString("image")
+                )
+                startActivity(intent)
+            }
+
             channelLayout.addView(dynamicButton)
         }
 
@@ -35,11 +59,29 @@ class ChannelActivity : AppCompatActivity() {
                 .get("https://api.sr.se/api/v2/channels?format=json")
                 .responseString{ _, _, result ->
                     val obj = JSONObject(result.get())
-                    val channels = obj.getJSONArray("channels")
+                    channels = obj.getJSONArray("channels")
                     for (i in 0 until channels.length()) {
                         val channel = channels.getJSONObject(i)
                         createButton(channel)
                     }
                 }
+
+        //Shaker
+        val options = ShakeOptions()
+            .background(true)
+            .interval(1000)
+            .shakeCount(2)
+            .sensibility(2.0f)
+        shakeDetector = ShakeDetector(options).start(
+            this
+        ) {
+            randomChannel = channels.get(Random.nextInt(0, channels.length())) as JSONObject
+            val intent = PlayActivity.newIntent(this@ChannelActivity,
+                    randomChannel.getString("name"),
+                    randomChannel.getJSONObject("liveaudio").getString("url"),
+                    randomChannel.getString("image")
+            )
+            startActivity(intent)
+        }
     }
 }
