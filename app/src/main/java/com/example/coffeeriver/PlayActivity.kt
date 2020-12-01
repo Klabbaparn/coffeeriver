@@ -23,6 +23,7 @@ class PlayActivity : AppCompatActivity() {
     private lateinit var volumeBar: SeekBar
     private lateinit var channelImage: ImageView
     private lateinit var backButton: ImageButton
+    private lateinit var pageHeader: TextView
     private var currentUrl: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +37,9 @@ class PlayActivity : AppCompatActivity() {
         }
 
         currentUrl = intent.getStringExtra(EXTRA_CHANNEL_URL).toString()
-        var currentChannel = intent.getStringExtra(EXTRA_CHANNEL)
+
+        pageHeader = findViewById(R.id.page_header)
+        pageHeader.setText(intent.getStringExtra(EXTRA_CHANNEL))
         var channelImageUrl = intent.getStringExtra(EXTRA_CHANNEL_IMAGE_URL)
 
         channelImage = findViewById(R.id.channel_image)
