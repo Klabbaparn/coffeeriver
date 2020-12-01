@@ -2,21 +2,24 @@ package com.example.coffeeriver
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.github.kittinunf.fuel.Fuel
+import org.json.JSONArray
 import org.json.JSONObject
 import safety.com.br.android_shake_detector.core.ShakeDetector
 import safety.com.br.android_shake_detector.core.ShakeOptions
+import kotlin.random.Random
 
 
 class ChannelActivity : AppCompatActivity() {
 
     private lateinit var channelLayout: LinearLayout
     private lateinit var shakeDetector: ShakeDetector
+    private lateinit var channels: JSONArray
+    private lateinit var randomChannel: JSONObject
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +43,7 @@ class ChannelActivity : AppCompatActivity() {
                 .get("https://api.sr.se/api/v2/channels?format=json")
                 .responseString{ _, _, result ->
                     val obj = JSONObject(result.get())
-                    val channels = obj.getJSONArray("channels")
+                    channels = obj.getJSONArray("channels")
                     for (i in 0 until channels.length()) {
                         val channel = channels.getJSONObject(i)
                         createButton(channel)
@@ -55,6 +58,9 @@ class ChannelActivity : AppCompatActivity() {
             .sensibility(2.0f)
         shakeDetector = ShakeDetector(options).start(
             this
-        ) { Toast.makeText(app,"this is toast message",Toast.LENGTH_SHORT).show()  }
+        ) {
+            randomChannel = channels.get(Random.nextInt(0, channels.length())) as JSONObject
+            Toast.makeText(this, randomChannel.getString("name"), Toast.LENGTH_SHORT).show()
+        }
     }
 }
