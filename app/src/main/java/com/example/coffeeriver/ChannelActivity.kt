@@ -2,16 +2,21 @@ package com.example.coffeeriver
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.github.kittinunf.fuel.Fuel
 import org.json.JSONObject
+import safety.com.br.android_shake_detector.core.ShakeDetector
+import safety.com.br.android_shake_detector.core.ShakeOptions
+
 
 class ChannelActivity : AppCompatActivity() {
 
     private lateinit var channelLayout: LinearLayout
+    private lateinit var shakeDetector: ShakeDetector
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,5 +46,15 @@ class ChannelActivity : AppCompatActivity() {
                         createButton(channel)
                     }
                 }
+
+        //Shaker
+        val options = ShakeOptions()
+            .background(true)
+            .interval(1000)
+            .shakeCount(2)
+            .sensibility(2.0f)
+        shakeDetector = ShakeDetector(options).start(
+            this
+        ) { Toast.makeText(app,"this is toast message",Toast.LENGTH_SHORT).show()  }
     }
 }
