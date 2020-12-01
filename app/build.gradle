@@ -34,6 +34,12 @@ android {
     }
 }
 
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
+
 dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -42,6 +48,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'com.github.kittinunf.fuel:fuel-android:2.3.0' //Fuel
+    implementation 'com.github.safetysystemtechnology:android-shake-detector:v1.2' //Shake
     implementation 'com.squareup.picasso:picasso:2.5.2'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
