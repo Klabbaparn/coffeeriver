@@ -2,6 +2,7 @@ package com.example.coffeeriver
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.github.kittinunf.fuel.Fuel
@@ -68,13 +69,12 @@ class ChannelActivity : AppCompatActivity() {
 
         //Shaker
         val options = ShakeOptions()
-            .background(true)
+            .background(false)
             .interval(1000)
             .shakeCount(2)
             .sensibility(2.0f)
-        shakeDetector = ShakeDetector(options).start(
-            this
-        ) {
+
+        shakeDetector = ShakeDetector(options).start(this) {
             randomChannel = channels.get(Random.nextInt(0, channels.length())) as JSONObject
             val intent = PlayActivity.newIntent(this@ChannelActivity,
                     randomChannel.getString("name"),
@@ -83,5 +83,20 @@ class ChannelActivity : AppCompatActivity() {
             )
             startActivity(intent)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        shakeDetector.start(baseContext)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        shakeDetector.stopShakeDetector(baseContext)
+    }
+
+    override fun onDestroy() {
+        shakeDetector.destroy(baseContext)
+        super.onDestroy()
     }
 }
