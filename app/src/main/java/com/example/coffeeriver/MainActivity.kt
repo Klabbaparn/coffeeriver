@@ -31,6 +31,8 @@ class MainActivity : AppCompatActivity(), StationAdapter.OnStationClickListener 
         Toast.makeText(this, "Station $position clicked", Toast.LENGTH_SHORT).show()
         val clickedStation = stationList[position]
         //clickedStation.title = "Clicked"
+        val intent = ChannelActivity.newIntent(this@MainActivity, position)
+        startActivity(intent)
     }
 
     private fun generateDummyList(size: Int) : List<StationItem> {

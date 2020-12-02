@@ -1,5 +1,7 @@
 package com.example.coffeeriver
 
+import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -8,10 +10,12 @@ import androidx.appcompat.app.AppCompatActivity
 import com.github.kittinunf.fuel.Fuel
 import org.json.JSONArray
 import org.json.JSONObject
+import safety.com.br.android_shake_detector.core.ShakeCallback
 import safety.com.br.android_shake_detector.core.ShakeDetector
 import safety.com.br.android_shake_detector.core.ShakeOptions
 import kotlin.random.Random
 
+private const val EXTRA_STATION = "com.example.coffeeriver.station"
 
 class ChannelActivity : AppCompatActivity() {
 
@@ -34,7 +38,7 @@ class ChannelActivity : AppCompatActivity() {
         }
 
         pageHeader = findViewById(R.id.page_header)
-        pageHeader.setText("Sveriges Radio")
+        Toast.makeText(this,"Picked Station: " + intent.getIntExtra(EXTRA_STATION, 0).toString() + ". Wow!", Toast.LENGTH_LONG).show()
 
         fun createButton(channel: JSONObject) {
             val dynamicButton = Button(this)
@@ -75,6 +79,7 @@ class ChannelActivity : AppCompatActivity() {
             .sensibility(2.0f)
 
         shakeDetector = ShakeDetector(options).start(this) {
+            shakeDetector.stopShakeDetector(baseContext)
             randomChannel = channels.get(Random.nextInt(0, channels.length())) as JSONObject
             val intent = PlayActivity.newIntent(this@ChannelActivity,
                     randomChannel.getString("name"),
@@ -82,6 +87,14 @@ class ChannelActivity : AppCompatActivity() {
                     randomChannel.getString("image")
             )
             startActivity(intent)
+        }
+    }
+
+    companion object {
+        fun newIntent(packageContext: Context, station: Int): Intent {
+            return Intent(packageContext, ChannelActivity::class.java).apply {
+                putExtra(EXTRA_STATION, station)
+            }
         }
     }
 
