@@ -1,11 +1,8 @@
 package com.example.coffeeriver
 
-import android.graphics.Typeface
 import android.os.Bundle
 import android.widget.Toast
-import androidx.viewpager2.widget.ViewPager2
 import kotlinx.android.synthetic.main.activity_main.*
-import me.relex.circleindicator.CircleIndicator3
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.test2.StationAdapter
