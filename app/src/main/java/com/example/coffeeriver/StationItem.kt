@@ -1,3 +1,3 @@
-package com.example.test2
+package com.example.coffeeriver
 
-data class StationItem(val imageResource: Int, val title: String, val ImageButton: Int)
+data class StationItem(var imageResource: Int, val title: String, var ImageButton: Int)

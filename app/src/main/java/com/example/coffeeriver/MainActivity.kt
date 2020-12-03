@@ -1,18 +1,17 @@
 package com.example.coffeeriver
 
-import android.graphics.Typeface
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
-import androidx.viewpager2.widget.ViewPager2
 import kotlinx.android.synthetic.main.activity_main.*
-import me.relex.circleindicator.CircleIndicator3
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.test2.StationAdapter
-import com.example.test2.StationItem
+import kotlinx.android.synthetic.main.station_item.*
 
 class MainActivity : AppCompatActivity(), StationAdapter.OnStationClickListener {
-    private val stationList = generateDummyList(20)
+    private var stationList = mutableListOf<StationItem>()
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +20,7 @@ class MainActivity : AppCompatActivity(), StationAdapter.OnStationClickListener 
         } catch (e: NullPointerException) {
         }
         setContentView(R.layout.activity_main)
+        initData()
 
         recycler_view.adapter = StationAdapter(stationList, this)
         recycler_view.layoutManager = LinearLayoutManager(this)
@@ -29,26 +29,54 @@ class MainActivity : AppCompatActivity(), StationAdapter.OnStationClickListener 
 
     override fun onStationClick(position: Int) {
         Toast.makeText(this, "Station $position clicked", Toast.LENGTH_SHORT).show()
-        val clickedStation = stationList[position]
-        //clickedStation.title = "Clicked"
         val intent = ChannelActivity.newIntent(this@MainActivity, position)
         startActivity(intent)
     }
 
-    private fun generateDummyList(size: Int) : List<StationItem> {
-        val list = ArrayList<StationItem>()
-
-        for (i in 0 until size) {
-            val drawable = when ( i % 3) {
-                0 -> R.drawable.sr_icon_1
-                1 -> R.drawable.bandit_rock_icon
-                2 -> R.drawable.finska_icon
-                else -> R.drawable.rix_fm_icon
-            }
-
-            val item = StationItem(drawable, "Station $i", R.drawable.ic_favorite_red_24)
-            list += item
+    override fun onFavBtnClick(position: Int) {
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("MODIFIED", true).apply()
+        if(sharedPreferences.getBoolean("STATION_ID_$position", false))
+        {
+            editor.putBoolean("STATION_ID_$position", false)
+            stationList[position].ImageButton = R.drawable.ic_favorite_shadow_45
         }
-        return list
+        else {
+            editor.putBoolean("STATION_ID_$position", true)
+            stationList[position].ImageButton = R.drawable.ic_favorite_red_45
+        }
+        editor.commit()
+        val saveState = recycler_view.layoutManager?.onSaveInstanceState()
+        recycler_view.adapter = StationAdapter(stationList, this)
+        recycler_view.layoutManager?.onRestoreInstanceState(saveState)
+        Toast.makeText(this, "Added to favorite", Toast.LENGTH_SHORT).show()
     }
+
+
+    private fun initData() : List<StationItem> {
+        sharedPreferences = getSharedPreferences("SharedPref", Context.MODE_PRIVATE)
+        if(sharedPreferences.getBoolean("MODIFIED", false)) {
+            stationList.add(StationItem(R.drawable.sr_icon_1, "Sveriges Radio", isFavorite("STATION_ID_0")))
+            stationList.add(StationItem(R.drawable.bandit_rock_icon, "Bandit Rock", isFavorite("STATION_ID_1")))
+            stationList.add(StationItem(R.drawable.finska_icon, "Finnish Radio", isFavorite("STATION_ID_2")))
+            stationList.add(StationItem(R.drawable.rix_fm_icon, "Rix fm", isFavorite("STATION_ID_3")))
+        }
+        else {
+            stationList.add(StationItem(R.drawable.sr_icon_1, "Sveriges Radio", R.drawable.ic_favorite_red_45))
+            stationList.add(StationItem(R.drawable.bandit_rock_icon, "Bandit Rock", R.drawable.ic_favorite_shadow_45))
+            stationList.add(StationItem(R.drawable.finska_icon, "Finnish Radio", R.drawable.ic_favorite_red_45))
+            stationList.add(StationItem(R.drawable.rix_fm_icon, "Rix fm", R.drawable.ic_favorite_shadow_45))
+        }
+        return stationList
+    }
+
+
+    private fun isFavorite(key: String): Int {
+        val favorite = sharedPreferences.getBoolean(key, false)
+        if(favorite) {
+            return R.drawable.ic_favorite_red_45
+        }
+        return R.drawable.ic_favorite_shadow_45
+    }
+
 }
