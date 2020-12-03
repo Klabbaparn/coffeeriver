@@ -3,10 +3,13 @@ package com.example.coffeeriver
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.github.kittinunf.fuel.Fuel
+import com.squareup.picasso.Picasso
 import org.json.JSONArray
 import org.json.JSONObject
 import safety.com.br.android_shake_detector.core.ShakeDetector
@@ -24,6 +27,8 @@ class ChannelActivity : AppCompatActivity() {
     private lateinit var randomChannel: JSONObject
     private lateinit var pageHeader: TextView
 
+    private lateinit var channelImage: ImageView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_channel)
@@ -40,14 +45,37 @@ class ChannelActivity : AppCompatActivity() {
 
         if(intent.getIntExtra(EXTRA_STATION, 0) == 0) {
             fun createButton(channel: JSONObject) {
-                val dynamicButton = Button(this)
-                val buttonLayoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                buttonLayoutParams.setMargins(30, 30, 30, 0)
-                dynamicButton.setLayoutParams(buttonLayoutParams)
-                dynamicButton.text = channel.getString("name")
-                dynamicButton.setBackgroundColor(Color.WHITE)
-                dynamicButton.setTextColor(Color.BLACK)
-                dynamicButton.setOnClickListener {
+
+                val dynamicScrollView = ScrollView(this)
+                val svLayoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                dynamicScrollView.layoutParams = svLayoutParams
+
+                val dynamicLinearLayout: LinearLayout = LinearLayout(this)
+                val llLayoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                llLayoutParams.setMargins(50, 20, 50, 0)
+                dynamicLinearLayout.setLayoutParams(llLayoutParams)
+                dynamicLinearLayout.setBackgroundColor(Color.WHITE)
+
+                dynamicScrollView.addView(dynamicLinearLayout)
+
+                val dynamicImageView: ImageView = ImageView(this)
+                val ivLayoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                dynamicImageView.setLayoutParams(ivLayoutParams)
+                dynamicImageView.setPadding(50, 20, 0,20)
+                val channelImageUrl: String = channel.getString("image")
+                Picasso.with(this).load(channelImageUrl).resize(100, 100).into(dynamicImageView)
+                dynamicLinearLayout.addView(dynamicImageView)
+
+                val dynamicTextView: TextView = TextView(this)
+                val tvLayoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                dynamicImageView.setLayoutParams(tvLayoutParams)
+                dynamicTextView.setPadding(100, 45, 0, 0)
+                dynamicTextView.text = channel.getString("name")
+                dynamicTextView.textSize = 20f
+                dynamicTextView.setTextColor(Color.BLACK)
+                dynamicLinearLayout.addView(dynamicTextView)
+
+                dynamicLinearLayout.setOnClickListener {
                     val intent = PlayActivity.newIntent(this@ChannelActivity,
                             channel.getString("name"),
                             channel.getJSONObject("liveaudio").getString("url"),
@@ -56,7 +84,7 @@ class ChannelActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
 
-                channelLayout.addView(dynamicButton)
+                channelLayout.addView(dynamicScrollView)
             }
 
             Fuel
