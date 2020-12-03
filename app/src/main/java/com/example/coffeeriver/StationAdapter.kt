@@ -1,4 +1,4 @@
-package com.example.test2
+package com.example.coffeeriver
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,19 +7,19 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.coffeeriver.R
 import kotlinx.android.synthetic.main.station_item.view.*
-import org.w3c.dom.Text
 
 class StationAdapter(
-    private val stationList: List<StationItem>,
-    private val stationListener: OnStationClickListener
+        private var stationList: List<StationItem>,
+        private val stationListener: OnStationClickListener
+
 ) : RecyclerView.Adapter<StationAdapter.StationViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StationViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(
             R.layout.station_item,
             parent, false)
+
         return StationViewHolder(itemView)
     }
 
@@ -40,19 +40,24 @@ class StationAdapter(
         val imageBtn: ImageButton = itemView.fav_btn
 
         init {
-            imageView.setOnClickListener(this)
+            imageView.setOnClickListener(View.OnClickListener {
+                val position = adapterPosition
+                stationListener.onStationClick(position) })
+            imageBtn.setOnClickListener(View.OnClickListener {
+                val position = adapterPosition
+                stationListener.onFavBtnClick(position) })
         }
 
         override fun onClick(v: View?) {
             val position = adapterPosition
-            //if (position != RecyclerView.NO_POSITION) {
             stationListener.onStationClick(position)
-            //}
         }
+
     }
 
     interface OnStationClickListener {
         fun onStationClick(position: Int)
+        fun onFavBtnClick(position: Int)
     }
 
 }
