@@ -45,26 +45,6 @@ class ChannelActivity : AppCompatActivity() {
 
         if(intent.getIntExtra(EXTRA_STATION, 0) == 0) {
             fun createButton(channel: JSONObject) {
-                /*val dynamicButton = Button(this)
-                val buttonLayoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                buttonLayoutParams.setMargins(30, 30, 30, 0)
-                dynamicButton.setLayoutParams(buttonLayoutParams)
-                dynamicButton.text = channel.getString("name")
-                dynamicButton.setBackgroundColor(Color.WHITE)
-                dynamicButton.setTextColor(Color.BLACK)
-                dynamicButton.setOnClickListener {
-                    val intent = PlayActivity.newIntent(this@ChannelActivity,
-                            channel.getString("name"),
-                            channel.getJSONObject("liveaudio").getString("url"),
-                            channel.getString("image")
-                    )
-                    startActivity(intent)
-                }
-                channelLayout.addView(dynamicButton)*/
-
-                /*val dynamicScrollView: ScrollView = ScrollView(this)
-                val svLayoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                dynamicScrollView.setLayoutParams(svLayoutParams)*/
 
                 val dynamicScrollView = ScrollView(this)
                 val svLayoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
