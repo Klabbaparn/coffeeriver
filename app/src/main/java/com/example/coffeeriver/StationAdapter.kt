@@ -6,7 +6,9 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.graphics.rotationMatrix
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.station_item.view.*
 
 class StationAdapter(
@@ -57,7 +59,7 @@ class StationAdapter(
 
     interface OnStationClickListener {
         fun onStationClick(position: Int)
-        fun onFavBtnClick(position: Int)
+        fun onFavBtnClick(position: Int) {}
     }
 
 }

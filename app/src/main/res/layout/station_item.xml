@@ -27,6 +27,7 @@
         android:layout_marginStart="18dp"
         android:layout_marginBottom="18dp"
         android:text="station"
+        android:visibility="invisible"
         android:textColor="#fff" />
 
     <ImageButton
@@ -36,7 +37,8 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="18dp"
         android:layout_marginBottom="18dp"
-        android:background="@drawable/ic_favorite_red_45" />
+        android:background="@drawable/ic_favorite_red_45"
+        />
 
 
 </androidx.cardview.widget.CardView>
