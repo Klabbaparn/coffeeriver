@@ -4,11 +4,15 @@ package com.example.coffeeriver
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.View
+import android.widget.ImageButton
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.rotationMatrix
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.station_item.*
+import kotlinx.android.synthetic.main.station_item.view.*
 
 class MainActivity : AppCompatActivity(), StationAdapter.OnStationClickListener {
     private var stationList = mutableListOf<StationItem>()
@@ -26,10 +30,11 @@ class MainActivity : AppCompatActivity(), StationAdapter.OnStationClickListener 
         recycler_view.adapter = StationAdapter(stationList, this)
         recycler_view.layoutManager = LinearLayoutManager(this)
         recycler_view.setHasFixedSize(true)
+
     }
 
     override fun onStationClick(position: Int) {
-        Toast.makeText(this, "Station $position clicked", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "${stationList[position].title} was selected", Toast.LENGTH_SHORT).show()
         val intent = ChannelActivity.newIntent(this@MainActivity, position)
         startActivity(intent)
     }
@@ -41,16 +46,17 @@ class MainActivity : AppCompatActivity(), StationAdapter.OnStationClickListener 
         {
             editor.putBoolean("STATION_ID_$position", false)
             stationList[position].ImageButton = R.drawable.ic_favorite_shadow_45
+            Toast.makeText(this, "${stationList[position].title} removed from favorite", Toast.LENGTH_SHORT).show()
         }
         else {
             editor.putBoolean("STATION_ID_$position", true)
             stationList[position].ImageButton = R.drawable.ic_favorite_red_45
+            Toast.makeText(this, "${stationList[position].title} added as favorite", Toast.LENGTH_SHORT).show()
         }
         editor.commit()
         val saveState = recycler_view.layoutManager?.onSaveInstanceState()
         recycler_view.adapter = StationAdapter(stationList, this)
         recycler_view.layoutManager?.onRestoreInstanceState(saveState)
-        Toast.makeText(this, "Added to favorite", Toast.LENGTH_SHORT).show()
     }
 
 

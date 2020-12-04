@@ -41,7 +41,7 @@ class ChannelActivity : AppCompatActivity() {
         }
 
         pageHeader = findViewById(R.id.page_header)
-        Toast.makeText(this,"Picked Station: " + intent.getIntExtra(EXTRA_STATION, 0).toString() + ". Wow!", Toast.LENGTH_LONG).show()
+        //Toast.makeText(this,"Picked Station: " + intent.getIntExtra(EXTRA_STATION, 0).toString() + ". Wow!", Toast.LENGTH_LONG).show()
 
         if(intent.getIntExtra(EXTRA_STATION, 0) == 0) {
             fun createButton(channel: JSONObject) {
