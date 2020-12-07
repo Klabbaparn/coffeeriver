@@ -8,4 +8,6 @@
     <string name="play_button_play">Play</string>
     <string name="play_button_pause">Pause</string>
     <string name="not_implemented">Not implemented yet</string>
+
+    <string name="undefined_station">Undefined</string>
 </resources>
