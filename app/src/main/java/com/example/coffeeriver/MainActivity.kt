@@ -64,15 +64,15 @@ class MainActivity : AppCompatActivity(), StationAdapter.OnStationClickListener 
         sharedPreferences = getSharedPreferences("SharedPref", Context.MODE_PRIVATE)
         if(sharedPreferences.getBoolean("MODIFIED", false)) {
             stationList.add(StationItem(R.drawable.sr_icon_1, "Sveriges Radio", isFavorite("STATION_ID_0")))
-            stationList.add(StationItem(R.drawable.bandit_rock_icon, "Bandit Rock", isFavorite("STATION_ID_1")))
-            stationList.add(StationItem(R.drawable.finska_icon, "Finnish Radio", isFavorite("STATION_ID_2")))
-            stationList.add(StationItem(R.drawable.rix_fm_icon, "Rix fm", isFavorite("STATION_ID_3")))
+            stationList.add(StationItem(R.drawable.placeholder_image, "Exempel 1", isFavorite("STATION_ID_1")))
+            stationList.add(StationItem(R.drawable.placeholder_image, "Exempel 2", isFavorite("STATION_ID_2")))
+            stationList.add(StationItem(R.drawable.placeholder_image, "Exempel 3", isFavorite("STATION_ID_3")))
         }
         else {
             stationList.add(StationItem(R.drawable.sr_icon_1, "Sveriges Radio", R.drawable.ic_favorite_red_45))
-            stationList.add(StationItem(R.drawable.bandit_rock_icon, "Bandit Rock", R.drawable.ic_favorite_shadow_45))
-            stationList.add(StationItem(R.drawable.finska_icon, "Finnish Radio", R.drawable.ic_favorite_red_45))
-            stationList.add(StationItem(R.drawable.rix_fm_icon, "Rix fm", R.drawable.ic_favorite_shadow_45))
+            stationList.add(StationItem(R.drawable.placeholder_image, "Exempel 1", R.drawable.ic_favorite_shadow_45))
+            stationList.add(StationItem(R.drawable.placeholder_image, "Exempel 2", R.drawable.ic_favorite_red_45))
+            stationList.add(StationItem(R.drawable.placeholder_image, "Exempel 3", R.drawable.ic_favorite_shadow_45))
         }
         return stationList
     }

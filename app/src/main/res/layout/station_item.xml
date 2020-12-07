@@ -16,6 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
+        android:background="@color/white"
+        android:text="@string/undefined_station"
         android:src="@drawable/sr_icon_1" />
 
     <TextView
