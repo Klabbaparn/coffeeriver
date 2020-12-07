@@ -1,14 +1,22 @@
 package com.example.coffeeriver
 
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.BitmapFactory
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.graphics.rotationMatrix
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.station_item.*
@@ -17,6 +25,8 @@ import kotlinx.android.synthetic.main.station_item.view.*
 class MainActivity : AppCompatActivity(), StationAdapter.OnStationClickListener {
     private var stationList = mutableListOf<StationItem>()
     private lateinit var sharedPreferences: SharedPreferences
+    private val channelID = "Radio Horizon"
+    private val notificationID = 101
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +36,7 @@ class MainActivity : AppCompatActivity(), StationAdapter.OnStationClickListener 
         }
         setContentView(R.layout.activity_main)
         initData()
+        createNotificationChannel()
 
         recycler_view.adapter = StationAdapter(stationList, this)
         recycler_view.layoutManager = LinearLayoutManager(this)
@@ -46,12 +57,12 @@ class MainActivity : AppCompatActivity(), StationAdapter.OnStationClickListener 
         {
             editor.putBoolean("STATION_ID_$position", false)
             stationList[position].ImageButton = R.drawable.ic_favorite_shadow_45
-            Toast.makeText(this, "${stationList[position].title} removed from favorite", Toast.LENGTH_SHORT).show()
+            sendNotification("Favorite removed", "${stationList[position].title} was removed from the favorite list", stationList[position].imageResource)
         }
         else {
             editor.putBoolean("STATION_ID_$position", true)
             stationList[position].ImageButton = R.drawable.ic_favorite_red_45
-            Toast.makeText(this, "${stationList[position].title} added as favorite", Toast.LENGTH_SHORT).show()
+            sendNotification("Favorite added", "${stationList[position].title} was added to the favorite list", stationList[position].imageResource)
         }
         editor.commit()
         val saveState = recycler_view.layoutManager?.onSaveInstanceState()
@@ -64,15 +75,15 @@ class MainActivity : AppCompatActivity(), StationAdapter.OnStationClickListener 
         sharedPreferences = getSharedPreferences("SharedPref", Context.MODE_PRIVATE)
         if(sharedPreferences.getBoolean("MODIFIED", false)) {
             stationList.add(StationItem(R.drawable.sr_icon_1, "Sveriges Radio", isFavorite("STATION_ID_0")))
-            stationList.add(StationItem(R.drawable.placeholder_image, "Exempel 1", isFavorite("STATION_ID_1")))
-            stationList.add(StationItem(R.drawable.placeholder_image, "Exempel 2", isFavorite("STATION_ID_2")))
-            stationList.add(StationItem(R.drawable.placeholder_image, "Exempel 3", isFavorite("STATION_ID_3")))
+            stationList.add(StationItem(R.drawable.bandit_rock_icon, "Bandit Rock", isFavorite("STATION_ID_1")))
+            stationList.add(StationItem(R.drawable.finska_icon, "Finish Radio", isFavorite("STATION_ID_2")))
+            stationList.add(StationItem(R.drawable.rix_fm_icon, "Rix FM", isFavorite("STATION_ID_3")))
         }
         else {
             stationList.add(StationItem(R.drawable.sr_icon_1, "Sveriges Radio", R.drawable.ic_favorite_red_45))
-            stationList.add(StationItem(R.drawable.placeholder_image, "Exempel 1", R.drawable.ic_favorite_shadow_45))
-            stationList.add(StationItem(R.drawable.placeholder_image, "Exempel 2", R.drawable.ic_favorite_red_45))
-            stationList.add(StationItem(R.drawable.placeholder_image, "Exempel 3", R.drawable.ic_favorite_shadow_45))
+            stationList.add(StationItem(R.drawable.bandit_rock_icon, "Bandit Rock", R.drawable.ic_favorite_shadow_45))
+            stationList.add(StationItem(R.drawable.finska_icon, "Finish Radio", R.drawable.ic_favorite_red_45))
+            stationList.add(StationItem(R.drawable.rix_fm_icon, "Rix FM", R.drawable.ic_favorite_shadow_45))
         }
         return stationList
     }
@@ -84,6 +95,43 @@ class MainActivity : AppCompatActivity(), StationAdapter.OnStationClickListener 
             return R.drawable.ic_favorite_red_45
         }
         return R.drawable.ic_favorite_shadow_45
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            val name = "Notification Title"
+            val descriptionText = "Notification Description"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(channelID, name, importance).apply {
+                description = descriptionText
+            }
+            val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    private fun sendNotification(notificationTitle: String, notificationMsg: String, icon: Int) {
+
+        val intent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+        val bitmap = BitmapFactory.decodeResource(applicationContext.resources, icon)
+        val bitmapLarge = BitmapFactory.decodeResource(applicationContext.resources, icon)
+
+        val builder = NotificationCompat.Builder(this, channelID)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle(notificationTitle)
+                .setContentText(notificationMsg)
+                .setLargeIcon(bitmapLarge)
+                .setStyle(NotificationCompat.BigPictureStyle().bigPicture(bitmap))
+                .setContentIntent(pendingIntent)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+        with(NotificationManagerCompat.from(this)) {
+            notify(notificationID, builder.build())
+        }
     }
 
 }
