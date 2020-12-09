@@ -45,7 +45,6 @@ class MainActivity : AppCompatActivity(), StationAdapter.OnStationClickListener 
     }
 
     override fun onStationClick(position: Int) {
-        Toast.makeText(this, "${stationList[position].title} was selected", Toast.LENGTH_SHORT).show()
         val intent = ChannelActivity.newIntent(this@MainActivity, position)
         startActivity(intent)
     }
